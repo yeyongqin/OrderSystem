@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ffcs.dao.FoodOrderRecordsDao">
+    <resultMap id="BaseResultMap" type="cn.ffcs.bean.FoodOrderRecords">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="userId" jdbcType="INTEGER" property="userId"/>
+        <result column="recordsNo" jdbcType="VARCHAR" property="recordsNo"/>
+        <result column="createTime" jdbcType="VARCHAR" property="createTime"/>
+        <result column="dataFlag" jdbcType="INTEGER" property="dataFlag"/>
+        <result column="updateTime" jdbcType="VARCHAR" property="updateTime"/>
+        <result column="orderState" jdbcType="VARCHAR" property="orderState"/>
+    </resultMap>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List">
+    id, userId, recordsNo, createTime, dataFlag, updateTime,orderState
+    </sql>
+    <select id="selectByExample" parameterType="cn.ffcs.bean.FoodOrderRecordsExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from foodorderrecords
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from foodorderrecords
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+      delete from foodorderrecords
+      where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <delete id="deleteByExample" parameterType="cn.ffcs.bean.FoodOrderRecordsExample">
+        delete from foodorderrecords
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+
+    <insert id="insertSelective" parameterType="cn.ffcs.bean.FoodOrderRecords">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into foodorderrecords
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                userId,
+            </if>
+            <if test="recordsNo != null">
+                recordsNo,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="dataFlag != null">
+                dataFlag,
+            </if>
+            <if test="updateTime != null">
+                updateTime,
+            </if>
+            <if test="orderState != null">
+                orderState,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="recordsNo != null">
+                #{recordsNo,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataFlag != null">
+                #{dataFlag,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="orderState != null">
+                #{orderState,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="cn.ffcs.bean.FoodOrderRecordsExample" resultType="java.lang.Integer">
+        select count(*) from foodorderrecords
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="cn.ffcs.bean.FoodOrderRecords">
+        update foodorderrecords
+        <set>
+            <if test="userId != null">
+                userId = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="recordsNo != null">
+                recordsNo = #{recordsNo,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataFlag != null">
+                dataFlag = #{dataFlag,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="orderState != null">
+                orderState = #{orderState,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="cn.ffcs.bean.FoodOrderRecords">
+    update foodorderrecords
+    set userId = #{userId,jdbcType=INTEGER},
+      recordsNo = #{recordsNo,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=VARCHAR},
+      dataFlag = #{dataFlag,jdbcType=INTEGER},
+      updateTime = #{updateTime,jdbcType=VARCHAR},
+      orderState = #{orderState,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

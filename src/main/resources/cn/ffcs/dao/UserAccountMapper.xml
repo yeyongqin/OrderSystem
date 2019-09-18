@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ffcs.dao.UserAccountDao">
+    <resultMap id="BaseResultMap" type="cn.ffcs.bean.UserAccount">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="userId" jdbcType="INTEGER" property="userId"/>
+        <result column="deposit" jdbcType="FLOAT" property="deposit"/>
+    </resultMap>
+
+    <!--将用户字段统一封装在一起-->
+    <sql id="Base_Column_List">
+    id,userId,deposit
+    </sql>
+
+    <!--新增用户账户-->
+    <insert id="insertSelective" parameterType="cn.ffcs.bean.UserAccount">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into useraccount
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                userId,
+            </if>
+            <if test="deposit != null">
+                deposit,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="deposit != null">
+                #{deposit,jdbcType=FLOAT},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据用户编号-->
+    <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from useraccount
+        where userId = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateDepositByUserId" parameterType="cn.ffcs.bean.UserAccount">
+        update useraccount
+        <set>
+            <if test="deposit != null">
+                deposit = #{deposit,jdbcType=FLOAT},
+            </if>
+        </set>
+        where userId = #{userId,jdbcType=INTEGER}
+    </update>
+</mapper>
